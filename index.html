@@ -1,80 +1,651 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Altamash Sayz - Islamic Portal</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark');
-        }function updateDailyQuote() {
-        const quotes = [
-            "Indeed, Allah is with those who are patient. (Quran 8:46)",
-            "The best among you are those who have the best manners and character. (Bukhari)",
-            "And hold firmly to the rope of Allah all together and do not become divided. (Quran 3:103)"
-        ];
-        document.getElementById("dailyQuote").innerText = quotes[Math.floor(Math.random() * quotes.length)];
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Altamash Sayz — Islamic Wisdom</title>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel+Decorative:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --gold: #c9a84c;
+      --gold-light: #f0d080;
+      --gold-dim: #8a6b28;
+      --deep: #0a0e1a;
+      --dark: #111827;
+      --panel: #141b2d;
+      --panel2: #1a2236;
+      --text: #e8dcc8;
+      --text-dim: #9a8c7a;
+      --green: #2a6b4a;
+      --green-light: #3d9e6e;
+      --accent: #7c3f1e;
     }
-    window.onload = updateDailyQuote;
-</script>
 
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--deep);
+      color: var(--text);
+      font-family: 'Lato', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── GEOMETRIC BACKGROUND ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 80% at 90% 100%, rgba(42,107,74,0.06) 0%, transparent 60%),
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 60px,
+          rgba(201,168,76,0.02) 60px,
+          rgba(201,168,76,0.02) 61px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 60px,
+          rgba(201,168,76,0.02) 60px,
+          rgba(201,168,76,0.02) 61px
+        );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 60px 20px 40px;
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+
+    .bismillah {
+      font-family: 'Amiri', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+      text-shadow: 0 0 30px rgba(201,168,76,0.4);
+      animation: fadeDown 1s ease both;
+    }
+
+    .site-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2rem, 5vw, 3.8rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dim));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 0.04em;
+      animation: fadeDown 1s 0.2s ease both;
+    }
+
+    .site-sub {
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-top: 8px;
+      animation: fadeDown 1s 0.4s ease both;
+    }
+
+    /* decorative divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 24px auto;
+      max-width: 400px;
+      animation: fadeIn 1.2s 0.5s ease both;
+    }
+    .divider-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); }
+    .divider-star { color: var(--gold); font-size: 1.2rem; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,14,26,0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(201,168,76,0.1);
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      padding: 0 20px;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 18px 24px;
+      cursor: pointer;
+      transition: color 0.3s, border-bottom 0.3s;
+      border-bottom: 2px solid transparent;
+      position: relative;
+    }
+    nav button:hover, nav button.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    /* ─── MAIN CONTENT ─── */
+    main { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 40px 20px 80px; }
+
+    .section { display: none; animation: fadeIn 0.6s ease both; }
+    .section.active { display: block; }
+
+    /* ─── HERO SECTION ─── */
+    .hero {
+      text-align: center;
+      padding: 40px 20px 20px;
+    }
+
+    .hero-verse {
+      font-family: 'Amiri', serif;
+      font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+      color: var(--gold-light);
+      line-height: 1.9;
+      margin-bottom: 12px;
+      direction: rtl;
+    }
+
+    .hero-translation {
+      font-style: italic;
+      color: var(--text-dim);
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+    .hero-ref { font-size: 0.8rem; color: var(--gold-dim); letter-spacing: 0.1em; }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .feature-card {
+      background: var(--panel);
+      border: 1px solid rgba(201,168,76,0.12);
+      border-radius: 12px;
+      padding: 32px 28px;
+      text-align: center;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .feature-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(201,168,76,0.4);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(201,168,76,0.07);
+    }
+    .feature-card .icon { font-size: 2.4rem; margin-bottom: 16px; }
+    .feature-card h3 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1rem;
+      color: var(--gold);
+      margin-bottom: 10px;
+      letter-spacing: 0.05em;
+    }
+    .feature-card p { color: var(--text-dim); font-size: 0.9rem; line-height: 1.7; }
+
+    /* ─── QURAN SECTION ─── */
+    .section-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      color: var(--gold);
+      text-align: center;
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+    }
+    .section-desc { text-align: center; color: var(--text-dim); margin-bottom: 36px; font-size: 0.9rem; }
+
+    .quran-controls {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+
+    .quran-controls select, .quran-controls input {
+      background: var(--panel2);
+      border: 1px solid rgba(201,168,76,0.2);
+      color: var(--text);
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.3s;
+      min-width: 180px;
+    }
+    .quran-controls select:focus, .quran-controls input:focus {
+      border-color: var(--gold);
+    }
+
+    .btn {
+      background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+      color: var(--deep);
+      border: none;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.3s, transform 0.2s;
+    }
+    .btn:hover { opacity: 0.88; transform: translateY(-2px); }
+    .btn:active { transform: translateY(0); }
+    .btn.secondary {
+      background: transparent;
+      border: 1px solid rgba(201,168,76,0.35);
+      color: var(--gold);
+    }
+
+    .verse-card {
+      background: var(--panel);
+      border: 1px solid rgba(201,168,76,0.12);
+      border-radius: 14px;
+      padding: 36px 32px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .verse-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+    }
+
+    .verse-arabic {
+      font-family: 'Amiri', serif;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      color: var(--gold-light);
+      text-align: right;
+      direction: rtl;
+      line-height: 2;
+      margin-bottom: 18px;
+    }
+    .verse-translation {
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 12px;
+    }
+    .verse-ref {
+      display: inline-block;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.2);
+      color: var(--gold);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    /* ─── HADITH SECTION ─── */
+    .hadith-controls { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-bottom: 28px; }
+
+    .hadith-card {
+      background: var(--panel);
+      border: 1px solid rgba(61,158,110,0.18);
+      border-radius: 14px;
+      padding: 36px 32px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hadith-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--green-light), transparent);
+    }
+
+    .hadith-text {
+      font-family: 'Amiri', serif;
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+    .hadith-narrator {
+      color: var(--green-light);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+    .hadith-source {
+      display: inline-block;
+      background: rgba(42,107,74,0.15);
+      border: 1px solid rgba(61,158,110,0.2);
+      color: var(--green-light);
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    /* ─── PRAYER TIMES ─── */
+    .prayer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+    .prayer-item {
+      background: var(--panel);
+      border: 1px solid rgba(201,168,76,0.12);
+      border-radius: 12px;
+      padding: 24px 16px;
+      text-align: center;
+      transition: border-color 0.3s;
+    }
+    .prayer-item.active-prayer {
+      border-color: var(--gold);
+      background: rgba(201,168,76,0.07);
+    }
+    .prayer-name {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.85rem;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+    .prayer-time {
+      font-size: 1.4rem;
+      color: var(--text);
+      font-weight: 300;
+    }
+    .prayer-arabic {
+      font-family: 'Amiri', serif;
+      font-size: 1rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    .location-form {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+    .location-form input {
+      background: var(--panel2);
+      border: 1px solid rgba(201,168,76,0.2);
+      color: var(--text);
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      flex: 1;
+      min-width: 180px;
+    }
+
+    /* ─── LOADING / SPINNER ─── */
+    .spinner {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 60px;
+    }
+    .spinner-ring {
+      width: 48px; height: 48px;
+      border: 3px solid rgba(201,168,76,0.15);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    /* ─── ABOUT ─── */
+    .about-content {
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .about-content p {
+      color: var(--text-dim);
+      line-height: 1.9;
+      margin-bottom: 20px;
+      font-size: 1rem;
+    }
+    .about-content p span { color: var(--gold); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 32px 20px;
+      border-top: 1px solid rgba(201,168,76,0.1);
+      color: var(--text-dim);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+    }
+    footer span { color: var(--gold); }
+
+    /* ─── ORNAMENT ─── */
+    .ornament {
+      text-align: center;
+      color: var(--gold);
+      font-size: 1.5rem;
+      letter-spacing: 0.5em;
+      margin: 32px 0;
+      opacity: 0.4;
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 600px) {
+      nav button { padding: 14px 12px; font-size: 0.72rem; }
+      .verse-card, .hadith-card { padding: 24px 18px; }
+    }
+
+    .error-msg {
+      text-align: center;
+      color: #e07070;
+      padding: 30px;
+      background: rgba(224,112,112,0.07);
+      border-radius: 10px;
+      border: 1px solid rgba(224,112,112,0.2);
+    }
+
+    .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .tag {
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 12px;
+      background: rgba(201,168,76,0.08);
+      border: 1px solid rgba(201,168,76,0.18);
+      color: var(--gold-dim);
+      letter-spacing: 0.06em;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white">
-    <!-- Navbar -->
-    <nav class="bg-green-600 p-4 text-white flex justify-between items-center flex-wrap">
-        <h1 class="text-2xl font-bold">Altamash Sayz</h1>
-        <button onclick="toggleDarkMode()" class="bg-gray-800 px-4 py-2 rounded md:hidden">☾</button>
-        <ul class="flex flex-col md:flex-row md:gap-4 md:items-center w-full md:w-auto mt-2 md:mt-0">
-            <li><a href="#home" class="hover:underline">Home</a></li>
-            <li><a href="#quotes" class="hover:underline">Quotes</a></li>
-            <li><a href="#quran" class="hover:underline">Quranic Verses</a></li>
-            <li><a href="#hadees" class="hover:underline">Hadees</a></li>
-            <li><a href="#blog" class="hover:underline">Blog</a></li>
-            <li><a href="#videos" class="hover:underline">Videos</a></li>
-            <li><a href="#prayers" class="hover:underline">Prayer Times</a></li>
-            <li><a href="#donation" class="hover:underline">Donate</a></li>
-        </ul>
-    </nav><!-- Hero Section -->
-<header id="home" class="text-center p-10 bg-green-500 text-white">
-    <h2 class="text-4xl font-bold">Welcome to Altamash Sayz</h2>
-    <p class="mt-2">A Complete Islamic Knowledge Portal</p>
-    <input type="text" id="search" placeholder="Search..." class="mt-4 p-2 text-black rounded w-full md:w-1/2">
+<body>
+
+<!-- ─── HEADER ─── -->
+<header>
+  <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+  <div class="site-title">Altamash Sayz</div>
+  <div class="site-sub">Islamic Wisdom · Quran · Hadith · Prayer</div>
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-star">✦</div>
+    <div class="divider-line"></div>
+    <div class="divider-star">☽</div>
+    <div class="divider-line"></div>
+    <div class="divider-star">✦</div>
+    <div class="divider-line"></div>
+  </div>
 </header>
 
-<!-- Islamic Quotes Section -->
-<section id="quotes" class="p-10">
-    <h2 class="text-3xl font-semibold text-center">Islamic Quotes</h2>
-    <p id="dailyQuote" class="mt-4 text-center italic"></p>
-</section>
+<!-- ─── NAV ─── -->
+<nav>
+  <button class="active" onclick="showSection('home', this)">Home</button>
+  <button onclick="showSection('quran', this)">Quran</button>
+  <button onclick="showSection('hadith', this)">Hadith</button>
+  <button onclick="showSection('prayer', this)">Prayer Times</button>
+  <button onclick="showSection('about', this)">About</button>
+</nav>
 
-<!-- Prayer Times Section -->
-<section id="prayers" class="p-10 bg-gray-200 dark:bg-gray-800">
-    <h2 class="text-3xl font-semibold text-center">Prayer Times</h2>
-    <p class="text-center">Coming Soon - Real-Time Prayer Time Integration</p>
-</section>
+<!-- ─── MAIN ─── -->
+<main>
 
-<!-- Donation Section -->
-<section id="donation" class="p-10">
-    <h2 class="text-3xl font-semibold text-center">Donate for a Good Cause</h2>
-    <p class="text-center">Support Islamic initiatives by donating to verified charities.</p>
-    <div class="text-center mt-4">
-        <button class="bg-green-600 text-white px-6 py-2 rounded">Donate Now</button>
+  <!-- HOME -->
+  <section id="home" class="section active">
+    <div class="hero">
+      <div class="hero-verse">إِنَّ مَعَ الْعُسْرِ يُسْرًا</div>
+      <div class="hero-translation">"Verily, with every difficulty comes ease."</div>
+      <div class="hero-ref">Quran 94:6</div>
     </div>
-</section>
-
-<!-- Videos Section -->
-<section id="videos" class="p-10">
-    <h2 class="text-3xl font-semibold text-center">Islamic Videos</h2>
-    <p class="mt-4 text-center">Watch Islamic lectures, naats, and Quran recitations.</p>
-    <div class="flex justify-center mt-4">
-        <iframe class="w-full md:w-3/4 lg:w-1/2" height="315" src="<iframe width="560" height="315" src="https://www.youtube.com/embed/Kv8wTfqh48E?si=tuszqTazHpN-TpEA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>" frameborder="0" allowfullscreen></iframe>
+    <div class="ornament">✦ ✦ ✦</div>
+    <div class="card-grid">
+      <div class="feature-card" onclick="showSection('quran', document.querySelector('nav button:nth-child(2)'))">
+        <div class="icon">📖</div>
+        <h3>Holy Quran</h3>
+        <p>Explore Ayahs from the Noble Quran with Arabic text, translation, and reference — a light for every heart.</p>
+      </div>
+      <div class="feature-card" onclick="showSection('hadith', document.querySelector('nav button:nth-child(3)'))">
+        <div class="icon">🕌</div>
+        <h3>Hadith</h3>
+        <p>Discover the sayings and traditions of Prophet Muhammad ﷺ — timeless wisdom for daily life.</p>
+      </div>
+      <div class="feature-card" onclick="showSection('prayer', document.querySelector('nav button:nth-child(4)'))">
+        <div class="icon">🌙</div>
+        <h3>Prayer Times</h3>
+        <p>Find accurate Salah times for your location — stay connected to the five daily pillars of faith.</p>
+      </div>
     </div>
-</section>
+  </section>
 
-<!-- Footer -->
-<footer class="bg-green-600 text-white text-center p-4 mt-10">
-    <p>&copy; 2025 Altamash Sayz. All Rights Reserved.</p>
+  <!-- QURAN -->
+  <section id="quran" class="section">
+    <div class="section-title">The Holy Quran</div>
+    <div class="section-desc">Browse Ayahs by Surah and Verse number</div>
+
+    <div class="quran-controls">
+      <select id="surahSelect">
+        <option value="">Select Surah...</option>
+      </select>
+      <input type="number" id="ayahInput" placeholder="Ayah No. (e.g. 1)" min="1" max="286"/>
+      <button class="btn" onclick="fetchAyah()">Fetch Ayah</button>
+      <button class="btn secondary" onclick="fetchRandomAyah()">Random Ayah</button>
+    </div>
+
+    <div id="quranResult"></div>
+  </section>
+
+  <!-- HADITH -->
+  <section id="hadith" class="section">
+    <div class="section-title">Hadith of the Prophet ﷺ</div>
+    <div class="section-desc">Pearls of wisdom from Sahih Bukhari, Muslim & more</div>
+
+    <div class="hadith-controls">
+      <select id="hadithCollection">
+        <option value="bukhari">Sahih Bukhari</option>
+        <option value="muslim">Sahih Muslim</option>
+        <option value="abudawud">Sunan Abu Dawud</option>
+        <option value="tirmidhi">Jami at-Tirmidhi</option>
+        <option value="nasai">Sunan an-Nasa'i</option>
+        <option value="ibnmajah">Sunan Ibn Majah</option>
+      </select>
+      <input type="number" id="hadithNum" placeholder="Hadith No. (e.g. 1)" min="1" style="min-width:180px; background:var(--panel2); border:1px solid rgba(201,168,76,0.2); color:var(--text); padding:12px 18px; border-radius:8px; font-family:'Lato',sans-serif; font-size:0.9rem; outline:none;"/>
+      <button class="btn" onclick="fetchHadith()">Fetch Hadith</button>
+      <button class="btn secondary" onclick="fetchRandomHadith()">Random Hadith</button>
+    </div>
+
+    <div id="hadithResult"></div>
+  </section>
+
+  <!-- PRAYER TIMES -->
+  <section id="prayer" class="section">
+    <div class="section-title">Salah Times</div>
+    <div class="section-desc">Enter your city to get accurate prayer times</div>
+
+    <div class="location-form">
+      <input type="text" id="cityInput" placeholder="Enter city (e.g. Karachi, London, Cairo)" />
+      <input type="text" id="countryInput" placeholder="Country (e.g. Pakistan)" />
+      <button class="btn" onclick="fetchPrayerTimes()">Get Times</button>
+    </div>
+
+    <div id="prayerResult"></div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section">
+    <div class="section-title">About Altamash Sayz</div>
+    <div class="ornament">☽ ✦ ☽</div>
+    <div class="about-content">
+      <p>
+        Welcome to <span>Altamash Sayz</span> — a digital sanctuary dedicated to sharing the beauty of Islamic knowledge. This platform brings together the sacred words of the <span>Holy Quran</span>, the blessed teachings of <span>Prophet Muhammad ﷺ</span>, and practical tools for the everyday Muslim.
+      </p>
+      <p>
+        Whether you seek a verse of comfort, a hadith of guidance, or simply the time to bow in prayer — <span>Altamash Sayz</span> is here to serve as a companion on your spiritual journey.
+      </p>
+      <p>
+        Built with love and reverence. Powered by <span>Quran.com API</span>, <span>HadithAPI</span>, and <span>Aladhan Prayer Times API</span>. May Allah bless all who seek knowledge. <span>آمين</span>
+      </p>
+      <div style="font-family:'Amiri',serif; font-size:1.8rem; color:var(--gold); margin-top:30px; direction:rtl;">
+        وَقُل رَّبِّ زِدْنِي عِلْمًا
+      </div>
+      <div style="color:var(--text-dim); font-style:italic; margin-top:8px;">"And say: My Lord, increase me in knowledge." — Quran 20:114</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="divider" style="max-width:300px;">
+    <div class="divider-line"></div>
+    <div class="divider-star">✦</div>
+    <div class="divider-line"></div>
+  </div>
+  <p>© 2025 <span>Altamash Sayz</span> · Crafted with faith & devotion · <span>سُبْحَانَ اللَّه</span></p>
 </footer>
 
-</body>
-</html>
+<script>
+/* ─── NAVIGATION ─── */
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
+
+  if (id === 'quran' && !document.getElementById('surahSelect').options.length > 1) loadSurahs();
+  if (id === 'hadith') fetchRand
